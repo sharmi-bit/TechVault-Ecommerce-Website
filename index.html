@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechVault – Next-Gen Electronics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --card: #16161f;
+            --border: #22222e;
+            --accent: #00e5ff;
+            --accent2: #ff3cac;
+            --accent3: #f5a623;
+            --text: #e2e2f0;
+            --muted: #6b6b8a;
+            --white: #ffffff;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+ 
+        /* ===================== LOGIN / AUTH PAGE ===================== */
+        #authPage {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        #authPage.hidden { display: none; }
+ 
+        .auth-left {
+            flex: 1;
+            background: var(--surface);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            overflow: hidden;
+        }
+        .auth-left::before {
+            content: '';
+            position: absolute;
+            top: -200px; left: -200px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(0,229,255,0.12) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        .auth-left::after {
+            content: '';
+            position: absolute;
+            bottom: -150px; right: -150px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(255,60,172,0.1) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        .auth-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .auth-brand {
+            position: relative; z-index: 2;
+            text-align: center; margin-bottom: 3rem;
+        }
+        .auth-brand .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem; font-weight: 800; color: var(--white);
+            display: flex; align-items: center; gap: 0.6rem;
+            justify-content: center; margin-bottom: 0.8rem;
+        }
+        .auth-brand .logo span { color: var(--accent); }
+        .auth-brand .logo-icon {
+            width: 44px; height: 44px; background: var(--accent);
+            border-radius: 11px; display: flex; align-items: center; justify-content: center;
+            color: var(--bg); font-size: 1.3rem;
+        }
+        .auth-brand p { color: var(--muted); font-size: 1rem; max-width: 320px; }
+        .auth-features {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column; gap: 1.2rem;
+            width: 100%; max-width: 340px;
+        }
+        .auth-feature {
+            display: flex; align-items: center; gap: 1rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border); border-radius: 12px;
+            padding: 1rem 1.2rem;
+            animation: slideInLeft 0.5s ease both;
+        }
+        .auth-feature:nth-child(1) { animation-delay: 0.1s; }
+        .auth-feature:nth-child(2) { animation-delay: 0.2s; }
+        .auth-feature:nth-child(3) { animation-delay: 0.3s; }
+        .auth-feature:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        .auth-feature-icon {
+            width: 38px; height: 38px; border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; flex-shrink: 0;
+        }
+        .auth-feature-icon.cyan  { background: rgba(0,229,255,0.12);  color: var(--accent); }
+        .auth-feature-icon.pink  { background: rgba(255,60,172,0.12);  color: var(--accent2); }
+        .auth-feature-icon.gold  { background: rgba(245,166,35,0.12);  color: var(--accent3); }
+        .auth-feature-icon.green { background: rgba(34,197,94,0.12);   color: #22c55e; }
+        .auth-feature-text strong { display: block; font-size: 0.9rem; color: var(--white); font-weight: 600; }
+        .auth-feature-text span   { font-size: 0.8rem; color: var(--muted); }
+ 
+        .auth-right {
+            width: 480px; flex-shrink: 0;
+            background: var(--bg); border-left: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            padding: 3rem 2.5rem;
+            overflow-y: auto;
+        }
+        .auth-form-wrap {
+            width: 100%; max-width: 380px;
+            animation: fadeUp 0.5s ease both;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+ 
+        .auth-tabs {
+            display: flex; background: var(--surface);
+            border: 1px solid var(--border); border-radius: 10px;
+            padding: 4px; margin-bottom: 2rem;
+        }
+        .auth-tab {
+            flex: 1; padding: 0.6rem; border: none; background: none;
+            border-radius: 7px; font-family: 'Syne', sans-serif;
+            font-size: 0.9rem; font-weight: 600; color: var(--muted);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .auth-tab.active { background: var(--accent); color: var(--bg); }
+ 
+        .auth-title {
+            font-family: 'Syne', sans-serif; font-size: 1.8rem;
+            font-weight: 800; color: var(--white); margin-bottom: 0.4rem;
+        }
+        .auth-subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+ 
+        .form-group { margin-bottom: 1.1rem; }
+        .form-label {
+            display: block; font-size: 0.82rem; font-weight: 600;
+            color: var(--text); margin-bottom: 0.45rem; letter-spacing: 0.3px;
+        }
+        .form-input-wrap { position: relative; }
+        .form-input-icon {
+            position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+            color: var(--muted); font-size: 0.9rem; pointer-events: none; transition: color 0.2s;
+        }
+        .form-input {
+            width: 100%; padding: 0.75rem 2.8rem 0.75rem 2.5rem;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 9px; color: var(--text); font-family: 'DM Sans', sans-serif;
+            font-size: 0.93rem; outline: none; transition: border 0.2s, box-shadow 0.2s;
+        }
+        .form-input::placeholder { color: var(--muted); }
+        .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,255,0.08); }
+        .form-input-wrap:focus-within .form-input-icon { color: var(--accent); }
+        .toggle-password {
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; color: var(--muted);
+            cursor: pointer; font-size: 0.9rem; transition: color 0.2s;
+        }
+        .toggle-password:hover { color: var(--accent); }
+ 
+        .form-row { display: flex; gap: 0.8rem; }
+        .form-row .form-group { flex: 1; }
+ 
+        .form-options {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem; margin-top: 0.3rem;
+        }
+        .checkbox-label {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.85rem; color: var(--muted); cursor: pointer;
+        }
+        .checkbox-label input[type=checkbox] { accent-color: var(--accent); }
+        .forgot-link {
+            font-size: 0.85rem; color: var(--accent);
+            text-decoration: none; transition: opacity 0.2s;
+        }
+        .forgot-link:hover { opacity: 0.7; }
+ 
+        .btn-auth {
+            width: 100%; padding: 0.85rem;
+            background: var(--accent); color: var(--bg);
+            border: none; border-radius: 9px;
+            font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            gap: 0.5rem; margin-bottom: 1.5rem;
+        }
+        .btn-auth:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,229,255,0.3); }
+        .btn-auth:active { transform: translateY(0); }
+ 
+        .auth-divider {
+            display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+        }
+        .auth-divider::before, .auth-divider::after {
+            content: ''; flex: 1; height: 1px; background: var(--border);
+        }
+        .auth-divider span { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+ 
+        .social-auth { display: flex; gap: 0.8rem; margin-bottom: 1.8rem; }
+        .btn-social {
+            flex: 1; padding: 0.7rem;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 9px; color: var(--text); font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-social:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.05); }
+        .btn-social .fab { font-size: 1rem; }
+        .btn-social .fa-google { color: #ea4335; }
+        .btn-social .fa-apple  { color: var(--white); }
+ 
+        .auth-switch { text-align: center; font-size: 0.88rem; color: var(--muted); }
+        .auth-switch a {
+            color: var(--accent); text-decoration: none; font-weight: 600; cursor: pointer;
+        }
+        .auth-switch a:hover { text-decoration: underline; }
+ 
+        .strength-meter { display: flex; gap: 4px; margin-top: 6px; }
+        .strength-bar { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background 0.3s; }
+        .strength-bar.weak   { background: #ef4444; }
+        .strength-bar.medium { background: var(--accent3); }
+        .strength-bar.strong { background: #22c55e; }
+        .strength-text { font-size: 0.75rem; margin-top: 4px; color: var(--muted); }
+ 
+        .form-error { font-size: 0.78rem; color: var(--accent2); margin-top: 4px; display: none; }
+        .form-error.show { display: block; }
+        .form-input.error { border-color: var(--accent2); }
+ 
+        .auth-success { display: none; flex-direction: column; align-items: center; text-align: center; padding: 2rem 0; }
+        .auth-success.show { display: flex; }
+        .success-icon {
+            width: 72px; height: 72px;
+            background: rgba(34,197,94,0.12); border: 2px solid #22c55e;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; color: #22c55e; margin-bottom: 1.5rem;
+            animation: pop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+        .success-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--white); margin-bottom: 0.5rem; }
+        .success-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+ 
+        @media (max-width: 900px) { .auth-left { display: none; } }
+        @media (max-width: 540px) {
+            .auth-right { width: 100%; border-left: none; padding: 2rem 1.5rem; }
+        }
+ 
+        /* ===================== SHOP PAGE ===================== */
+        #shopPage { display: none; flex-direction: column; min-height: 100vh; }
+        #shopPage.visible { display: flex; }
+ 
+        header {
+            background: rgba(10,10,15,0.88);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+        }
+        .header-container {
+            max-width: 1300px; margin: 0 auto; padding: 0 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            height: 68px; gap: 1.5rem;
+        }
+        .logo {
+            font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800;
+            color: var(--white); display: flex; align-items: center; gap: 0.5rem;
+            letter-spacing: -0.5px; flex-shrink: 0;
+        }
+        .logo span { color: var(--accent); }
+        .logo-icon {
+            width: 32px; height: 32px; background: var(--accent); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; color: var(--bg); font-size: 1rem;
+        }
+        .search-container { flex: 1; max-width: 480px; position: relative; }
+        .search-box {
+            width: 100%; padding: 0.65rem 3rem 0.65rem 1.2rem;
+            border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem;
+            background: var(--surface); color: var(--text); font-family: 'DM Sans', sans-serif;
+            transition: border 0.2s; outline: none;
+        }
+        .search-box::placeholder { color: var(--muted); }
+        .search-box:focus { border-color: var(--accent); }
+        .search-btn {
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; color: var(--accent); font-size: 1rem; cursor: pointer;
+        }
+        .header-actions { display: flex; align-items: center; gap: 1.2rem; }
+        .cart-icon {
+            position: relative; cursor: pointer; font-size: 1.3rem;
+            color: var(--text); transition: color 0.2s;
+        }
+        .cart-icon:hover { color: var(--accent); }
+        .cart-count {
+            position: absolute; top: -8px; right: -8px;
+            background: var(--accent2); color: white; border-radius: 50%;
+            width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 700;
+        }
+        .user-btn {
+            display: flex; align-items: center; gap: 0.5rem;
+            background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+            padding: 0.4rem 0.9rem; cursor: pointer; transition: all 0.2s;
+            color: var(--text); font-size: 0.85rem; font-weight: 500;
+        }
+        .user-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+        .user-avatar {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 700; color: var(--bg);
+        }
+ 
+        main { margin-top: 68px; flex: 1; }
+ 
+        .hero {
+            position: relative; overflow: hidden; padding: 6rem 2rem 5rem; background: var(--bg);
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+            width: 900px; height: 600px;
+            background: radial-gradient(ellipse at center, rgba(0,229,255,0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-grid {
+            max-width: 1300px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+        }
+        .hero-label {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.2);
+            color: var(--accent); font-size: 0.8rem; font-weight: 500;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            padding: 0.35rem 0.9rem; border-radius: 100px; margin-bottom: 1.5rem;
+        }
+        .hero-title {
+            font-family: 'Syne', sans-serif; font-size: 3.8rem; font-weight: 800;
+            color: var(--white); line-height: 1.05; letter-spacing: -1px; margin-bottom: 1.5rem;
+        }
+        .hero-title .highlight {
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-sub { color: var(--muted); font-size: 1.05rem; max-width: 420px; margin-bottom: 2.5rem; }
+        .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.85rem 1.8rem; background: var(--accent); color: var(--bg);
+            border: none; border-radius: 8px; font-family: 'Syne', sans-serif;
+            font-size: 0.95rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,229,255,0.25); }
+        .btn-outline {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.85rem 1.8rem; background: transparent; color: var(--text);
+            border: 1px solid var(--border); border-radius: 8px; font-family: 'Syne', sans-serif;
+            font-size: 0.95rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s;
+        }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+        .hero-visual { position: relative; display: flex; align-items: center; justify-content: center; }
+        .hero-glow {
+            width: 380px; height: 380px;
+            background: radial-gradient(circle, rgba(0,229,255,0.12) 0%, transparent 70%);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        .hero-product-img {
+            width: 280px; filter: drop-shadow(0 0 40px rgba(0,229,255,0.3));
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-14px); }
+        }
+        .hero-badge {
+            position: absolute; background: var(--card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 0.6rem 1rem; font-size: 0.82rem; font-weight: 600;
+            display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;
+        }
+        .hero-badge.b1 { top: 20px; right: 0; }
+        .hero-badge.b2 { bottom: 30px; left: -10px; }
+        .hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+ 
+        .stats-strip {
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+            background: var(--surface); padding: 1.5rem 2rem;
+        }
+        .stats-inner {
+            max-width: 1300px; margin: 0 auto;
+            display: flex; justify-content: space-around; gap: 2rem; flex-wrap: wrap;
+        }
+        .stat-item { text-align: center; }
+        .stat-num { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+        .stat-label { font-size: 0.82rem; color: var(--muted); }
+ 
+        .categories-section { padding: 3.5rem 2rem 1rem; max-width: 1300px; margin: 0 auto; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.8rem; }
+        .section-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--white); }
+        .categories-grid { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .cat-chip {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.55rem 1.2rem; background: var(--card); border: 1px solid var(--border);
+            border-radius: 100px; font-size: 0.88rem; font-weight: 500; cursor: pointer;
+            transition: all 0.2s; color: var(--muted); font-family: 'DM Sans', sans-serif;
+        }
+        .cat-chip:hover, .cat-chip.active { background: rgba(0,229,255,0.08); border-color: var(--accent); color: var(--accent); }
+ 
+        .products-section { padding: 2rem 2rem 4rem; max-width: 1300px; margin: 0 auto; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
+        .product-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+            overflow: hidden; transition: all 0.25s ease; position: relative; display: flex; flex-direction: column;
+        }
+        .product-card:hover {
+            border-color: rgba(0,229,255,0.35); transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,229,255,0.1);
+        }
+        .product-badge {
+            position: absolute; top: 10px; left: 10px; padding: 0.22rem 0.65rem;
+            border-radius: 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px;
+            text-transform: uppercase; z-index: 1;
+        }
+        .badge-hot     { background: var(--accent2); color: white; }
+        .badge-new     { background: var(--accent);  color: var(--bg); }
+        .badge-sale    { background: var(--accent3);  color: var(--bg); }
+        .badge-default { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+        .product-image-container {
+            width: 100%; height: 180px; background: #0e0e17;
+            display: flex; align-items: center; justify-content: center;
+            padding: 1.2rem; position: relative; overflow: hidden;
+        }
+        .product-image-container::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 40px; background: linear-gradient(transparent, var(--card));
+        }
+        .product-image { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.3s ease; }
+        .product-card:hover .product-image { transform: scale(1.06); }
+        .product-info { padding: 1.2rem; flex: 1; display: flex; flex-direction: column; }
+        .product-name {
+            font-family: 'Syne', sans-serif; font-size: 0.98rem; font-weight: 700;
+            color: var(--white); margin-bottom: 0.3rem; line-height: 1.3;
+        }
+        .product-desc { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; flex: 1; }
+        .product-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+        .product-price { font-family: 'Syne', sans-serif; font-size: 1.2rem; color: var(--accent); font-weight: 700; }
+        .product-price::before { content: '₹'; font-size: 0.85rem; }
+        .add-to-cart {
+            display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem;
+            background: rgba(0,229,255,0.1); color: var(--accent); border: 1px solid rgba(0,229,255,0.25);
+            border-radius: 7px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; white-space: nowrap; font-family: 'DM Sans', sans-serif;
+        }
+        .add-to-cart:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+ 
+        .cart-sidebar {
+            position: fixed; right: -440px; top: 0; width: 420px; height: 100vh;
+            background: var(--surface); border-left: 1px solid var(--border);
+            transition: right 0.3s cubic-bezier(0.4,0,0.2,1); z-index: 1001;
+            display: flex; flex-direction: column;
+        }
+        .cart-sidebar.open { right: 0; }
+        .cart-header {
+            background: var(--card); border-bottom: 1px solid var(--border);
+            padding: 1.4rem 1.5rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .cart-header h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--white); }
+        .cart-close {
+            background: var(--surface); border: 1px solid var(--border); color: var(--text);
+            font-size: 1rem; cursor: pointer; width: 32px; height: 32px; border-radius: 7px;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        }
+        .cart-close:hover { border-color: var(--accent2); color: var(--accent2); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 1rem; }
+        .cart-item {
+            display: flex; gap: 1rem; padding: 1rem; background: var(--card);
+            border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.8rem; align-items: center;
+        }
+        .cart-item img { width: 70px; height: 70px; object-fit: contain; background: #0e0e17; border-radius: 8px; padding: 0.3rem; }
+        .cart-item-info { flex: 1; }
+        .cart-item-name { font-weight: 600; color: var(--white); font-size: 0.9rem; margin-bottom: 0.2rem; }
+        .cart-item-price { color: var(--accent); font-size: 0.85rem; font-weight: 600; }
+        .remove-btn { background: none; border: none; color: var(--muted); cursor: pointer; transition: color 0.2s; font-size: 0.9rem; padding: 0.2rem; }
+        .remove-btn:hover { color: var(--accent2); }
+        .cart-empty { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+        .cart-empty i { font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.3; }
+        .cart-footer { padding: 1.5rem; border-top: 1px solid var(--border); }
+        .cart-total {
+            font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--white);
+            margin-bottom: 1rem; display: flex; justify-content: space-between;
+        }
+        .checkout-btn {
+            width: 100%; padding: 0.9rem; background: var(--accent); color: var(--bg);
+            border: none; border-radius: 9px; font-family: 'Syne', sans-serif;
+            font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+        }
+        .checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,229,255,0.3); }
+ 
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); opacity: 0; visibility: hidden;
+            transition: all 0.25s; z-index: 1000; backdrop-filter: blur(2px);
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+        .toast {
+            position: fixed; bottom: 2rem; left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--card); border: 1px solid var(--border); color: var(--text);
+            padding: 0.8rem 1.6rem; border-radius: 9px; box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            opacity: 0; transition: all 0.25s cubic-bezier(0.4,0,0.2,1); z-index: 1002;
+            font-size: 0.9rem; font-weight: 500;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+ 
+        footer { background: var(--surface); border-top: 1px solid var(--border); padding: 3rem 0 1.5rem; }
+        .footer-container { max-width: 1300px; margin: 0 auto; padding: 0 2rem; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2.5rem; }
+        .footer-section h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 1.2rem; }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: 0.6rem; }
+        .footer-section a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; display: flex; align-items: center; gap: 0.5rem; }
+        .footer-section a:hover { color: var(--accent); }
+        .social-links { display: flex; gap: 0.8rem; margin-top: 1rem; }
+        .social-links a {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; transition: all 0.2s; font-size: 0.85rem;
+        }
+        .social-links a:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.08); }
+        .footer-bottom {
+            border-top: 1px solid var(--border); padding-top: 1.2rem;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+        }
+        .footer-bottom p { color: var(--muted); font-size: 0.82rem; }
+        .footer-bottom span { color: var(--accent); }
+ 
+        @media (max-width: 900px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-visual { display: none; }
+            .hero-sub { margin: 0 auto 2.5rem; }
+            .hero-btns { justify-content: center; }
+            .hero-title { font-size: 2.6rem; }
+        }
+        @media (max-width: 640px) {
+            .header-container { flex-wrap: wrap; height: auto; padding: 0.8rem 1.2rem; gap: 0.8rem; }
+            .search-container { order: 3; flex-basis: 100%; }
+            .hero-title { font-size: 2rem; }
+            .cart-sidebar { width: 100%; right: -100%; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+ 
+<!-- ======================== AUTH PAGE ======================== -->
+<div id="authPage">
+    <div class="auth-left">
+        <div class="auth-grid"></div>
+        <div class="auth-brand">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+                Tech<span>Vault</span>
+            </div>
+            <p>Your premier destination for next-generation electronics and premium gadgets.</p>
+        </div>
+        <div class="auth-features">
+            <div class="auth-feature">
+                <div class="auth-feature-icon cyan"><i class="fas fa-truck"></i></div>
+                <div class="auth-feature-text">
+                    <strong>1-Day Express Delivery</strong>
+                    <span>Free shipping on orders above ₹999</span>
+                </div>
+            </div>
+            <div class="auth-feature">
+                <div class="auth-feature-icon pink"><i class="fas fa-shield-alt"></i></div>
+                <div class="auth-feature-text">
+                    <strong>Buyer Protection</strong>
+                    <span>100% secure payments guaranteed</span>
+                </div>
+            </div>
+            <div class="auth-feature">
+                <div class="auth-feature-icon gold"><i class="fas fa-undo"></i></div>
+                <div class="auth-feature-text">
+                    <strong>7-Day Easy Returns</strong>
+                    <span>Hassle-free return policy</span>
+                </div>
+            </div>
+            <div class="auth-feature">
+                <div class="auth-feature-icon green"><i class="fas fa-headset"></i></div>
+                <div class="auth-feature-text">
+                    <strong>24/7 Support</strong>
+                    <span>Expert help whenever you need it</span>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="auth-right">
+        <div class="auth-form-wrap">
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="loginTab" onclick="switchTab('login')">Sign In</button>
+                <button class="auth-tab" id="signupTab" onclick="switchTab('signup')">Create Account</button>
+            </div>
+ 
+            <!-- LOGIN -->
+            <div id="loginForm">
+                <h2 class="auth-title">Welcome back</h2>
+                <p class="auth-subtitle">Sign in to your TechVault account</p>
+ 
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <div class="form-input-wrap">
+                        <input type="email" class="form-input" id="loginEmail" placeholder="you@example.com">
+                        <i class="fas fa-envelope form-input-icon"></i>
+                    </div>
+                    <div class="form-error" id="loginEmailErr">Please enter a valid email.</div>
+                </div>
+ 
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="form-input-wrap">
+                        <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password">
+                        <i class="fas fa-lock form-input-icon"></i>
+                        <button class="toggle-password" type="button" onclick="togglePwd('loginPassword',this)"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="form-error" id="loginPassErr">Password must be at least 6 characters.</div>
+                </div>
+ 
+                <div class="form-options">
+                    <label class="checkbox-label"><input type="checkbox" id="rememberMe"> Remember me</label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+ 
+                <button class="btn-auth" onclick="handleLogin()"><i class="fas fa-bolt"></i> Sign In</button>
+ 
+                <div class="auth-divider"><span>or continue with</span></div>
+                <div class="social-auth">
+                    <button class="btn-social" onclick="socialLogin('Google')"><i class="fab fa-google"></i> Google</button>
+                    <button class="btn-social" onclick="socialLogin('Apple')"><i class="fab fa-apple"></i> Apple</button>
+                </div>
+                <p class="auth-switch">Don't have an account? <a onclick="switchTab('signup')">Create one</a></p>
+            </div>
+ 
+            <!-- SIGNUP -->
+            <div id="signupForm" style="display:none">
+                <div id="signupFields">
+                    <h2 class="auth-title">Create account</h2>
+                    <p class="auth-subtitle">Join TechVault and start shopping smarter</p>
+ 
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <div class="form-input-wrap">
+                                <input type="text" class="form-input" id="signupFirst" placeholder="John">
+                                <i class="fas fa-user form-input-icon"></i>
+                            </div>
+                            <div class="form-error" id="signupFirstErr">Enter your first name.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <div class="form-input-wrap">
+                                <input type="text" class="form-input" id="signupLast" placeholder="Doe">
+                                <i class="fas fa-user form-input-icon"></i>
+                            </div>
+                            <div class="form-error" id="signupLastErr">Enter your last name.</div>
+                        </div>
+                    </div>
+ 
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <div class="form-input-wrap">
+                            <input type="email" class="form-input" id="signupEmail" placeholder="you@example.com">
+                            <i class="fas fa-envelope form-input-icon"></i>
+                        </div>
+                        <div class="form-error" id="signupEmailErr">Please enter a valid email.</div>
+                    </div>
+ 
+                    <div class="form-group">
+                        <label class="form-label">Mobile Number</label>
+                        <div class="form-input-wrap">
+                            <input type="tel" class="form-input" id="signupPhone" placeholder="+91 98765 43210">
+                            <i class="fas fa-phone form-input-icon"></i>
+                        </div>
+                        <div class="form-error" id="signupPhoneErr">Enter a valid 10-digit mobile number.</div>
+                    </div>
+ 
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="form-input-wrap">
+                            <input type="password" class="form-input" id="signupPassword" placeholder="Create a strong password" oninput="checkStrength(this.value)">
+                            <i class="fas fa-lock form-input-icon"></i>
+                            <button class="toggle-password" type="button" onclick="togglePwd('signupPassword',this)"><i class="fas fa-eye"></i></button>
+                        </div>
+                        <div class="strength-meter">
+                            <div class="strength-bar" id="sb1"></div>
+                            <div class="strength-bar" id="sb2"></div>
+                            <div class="strength-bar" id="sb3"></div>
+                            <div class="strength-bar" id="sb4"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText"></div>
+                        <div class="form-error" id="signupPassErr">Password must be at least 8 characters.</div>
+                    </div>
+ 
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <div class="form-input-wrap">
+                            <input type="password" class="form-input" id="signupConfirm" placeholder="Re-enter your password">
+                            <i class="fas fa-lock form-input-icon"></i>
+                            <button class="toggle-password" type="button" onclick="togglePwd('signupConfirm',this)"><i class="fas fa-eye"></i></button>
+                        </div>
+                        <div class="form-error" id="signupConfirmErr">Passwords do not match.</div>
+                    </div>
+ 
+                    <div class="form-group" style="margin-bottom:1.5rem">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreeTerms">
+                            I agree to the <a href="#" class="forgot-link" style="margin:0 3px">Terms</a> &amp; <a href="#" class="forgot-link" style="margin:0 3px">Privacy Policy</a>
+                        </label>
+                        <div class="form-error" id="termsErr">Please accept the terms to continue.</div>
+                    </div>
+ 
+                    <button class="btn-auth" onclick="handleSignup()"><i class="fas fa-user-plus"></i> Create Account</button>
+ 
+                    <div class="auth-divider"><span>or sign up with</span></div>
+                    <div class="social-auth">
+                        <button class="btn-social" onclick="socialLogin('Google')"><i class="fab fa-google"></i> Google</button>
+                        <button class="btn-social" onclick="socialLogin('Apple')"><i class="fab fa-apple"></i> Apple</button>
+                    </div>
+                    <p class="auth-switch">Already have an account? <a onclick="switchTab('login')">Sign in</a></p>
+                </div>
+ 
+                <div class="auth-success" id="signupSuccess">
+                    <div class="success-icon"><i class="fas fa-check"></i></div>
+                    <div class="success-title">Account Created!</div>
+                    <p class="success-sub">Welcome to TechVault. Taking you to the store…</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- ======================== SHOP PAGE ======================== -->
+<div id="shopPage">
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+                Tech<span>Vault</span>
+            </div>
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchInput" placeholder="Search gadgets, brands…">
+                <button class="search-btn" onclick="searchProducts()"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="header-actions">
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="user-btn" onclick="logout()" title="Click to sign out">
+                    <div class="user-avatar" id="userAvatar">TV</div>
+                    <span id="userName">User</span>
+                    <i class="fas fa-sign-out-alt" style="font-size:0.75rem;opacity:0.5"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+ 
+    <main>
+        <section class="hero">
+            <div class="hero-grid">
+                <div class="hero-text">
+                    <div class="hero-label"><i class="fas fa-circle" style="font-size:0.5rem"></i> New Arrivals 2025</div>
+                    <h1 class="hero-title">Future Tech,<br>Delivered <span class="highlight">Today.</span></h1>
+                    <p class="hero-sub">Premium electronics curated for creators, gamers, and professionals. From flagship smartphones to pro audio — all in one place.</p>
+                    <div class="hero-btns">
+                        <a href="#products" class="btn-primary"><i class="fas fa-bolt"></i> Shop Now</a>
+                        <a href="#categories" class="btn-outline"><i class="fas fa-th-large"></i> Browse Categories</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-glow">
+                        <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-model-unselect-gallery-1-202309?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1693347548384"
+                             alt="Flagship Smartphone" class="hero-product-img">
+                        <div class="hero-badge b1"><span class="dot"></span> In Stock — Ships Today</div>
+                        <div class="hero-badge b2"><i class="fas fa-star" style="color:var(--accent3)"></i> 4.9 · 2,400 Reviews</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+ 
+        <div class="stats-strip">
+            <div class="stats-inner">
+                <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">Products Listed</div></div>
+                <div class="stat-item"><div class="stat-num">1-Day</div><div class="stat-label">Express Delivery</div></div>
+                <div class="stat-item"><div class="stat-num">₹0</div><div class="stat-label">Delivery over ₹999</div></div>
+                <div class="stat-item"><div class="stat-num">7-Day</div><div class="stat-label">Easy Returns</div></div>
+                <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Customer Support</div></div>
+            </div>
+        </div>
+ 
+        <div class="categories-section" id="categories">
+            <div class="section-header"><h2 class="section-title">Browse by Category</h2></div>
+            <div class="categories-grid" id="categoryChips"></div>
+        </div>
+ 
+        <section class="products-section" id="products">
+            <div class="section-header"><h2 class="section-title">Featured Gadgets</h2></div>
+            <div class="products-grid" id="productsGrid"></div>
+        </section>
+    </main>
+ 
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Shop</h3>
+                    <ul>
+                        <li><a href="#products"><i class="fas fa-mobile-alt"></i> Smartphones</a></li>
+                        <li><a href="#products"><i class="fas fa-laptop"></i> Laptops & PCs</a></li>
+                        <li><a href="#products"><i class="fas fa-headphones"></i> Audio</a></li>
+                        <li><a href="#products"><i class="fas fa-gamepad"></i> Gaming</a></li>
+                        <li><a href="#products"><i class="fas fa-camera"></i> Cameras</a></li>
+                        <li><a href="#products"><i class="fas fa-tv"></i> Televisions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Customer Help</h3>
+                    <ul>
+                        <li><a href="#" onclick="toggleCart()"><i class="fas fa-shopping-bag"></i> My Cart</a></li>
+                        <li><a href="#"><i class="fas fa-truck"></i> Track Order</a></li>
+                        <li><a href="#"><i class="fas fa-undo"></i> Returns & Refunds</a></li>
+                        <li><a href="#"><i class="fas fa-credit-card"></i> Payment Options</a></li>
+                        <li><a href="#"><i class="fas fa-headset"></i> Support Chat</a></li>
+                        <li><a href="#"><i class="fas fa-question-circle"></i> FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-info-circle"></i> About TechVault</a></li>
+                        <li><a href="#"><i class="fas fa-briefcase"></i> Careers</a></li>
+                        <li><a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                        <li><a href="#"><i class="fas fa-store"></i> Sell on TechVault</a></li>
+                        <li><a href="#"><i class="fas fa-newspaper"></i> Blog & Reviews</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Stay Connected</h3>
+                    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem;">Follow for deals, drops & tech news.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 <span>TechVault</span>. All rights reserved.</p>
+                <p>Made with <span>⚡</span> for gadget lovers.</p>
+            </div>
+        </div>
+    </footer>
+ 
+    <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-bag" style="margin-right:0.5rem;color:var(--accent)"></i> My Cart</h3>
+            <button class="cart-close" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty"><i class="fas fa-shopping-bag"></i><p>Your cart is empty</p></div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Total</span><span id="cartTotal">₹0</span></div>
+            <button class="checkout-btn" onclick="checkout()"><i class="fas fa-bolt" style="margin-right:0.5rem"></i>Proceed to Checkout</button>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+</div>
+ 
+<script>
+/* ---- STATE ---- */
+let currentUser = null;
+let cart = [];
+let activeCategory = 'All';
+ 
+const products = [
+    {id:1,  name:"Sony WH-1000XM5",      cat:"Audio",       price:26990,  badge:"Hot",    desc:"Industry-leading noise cancellation",   img:"https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400&q=80"},
+    {id:2,  name:"Apple Watch Series 9",  cat:"Wearables",   price:41900,  badge:"New",    desc:"Always-on Retina, S9 chip",             img:"https://images.unsplash.com/photo-1617043786394-f977fa12eddf?w=400&q=80"},
+    {id:3,  name:"JBL Flip 6",            cat:"Audio",       price:11999,  badge:"Sale",   desc:"Waterproof portable Bluetooth speaker", img:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80"},
+    {id:4,  name:"Ergonomic Laptop Stand",cat:"Accessories", price:2499,   badge:null,     desc:"Aluminium alloy, adjustable height",    img:"https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400&q=80"},
+    {id:5,  name:"Logitech G Pro X",      cat:"Gaming",      price:6999,   badge:null,     desc:"Hero 25K sensor, ultra-lightweight",    img:"https://images.unsplash.com/photo-1527814050087-3793815479db?w=400&q=80"},
+{id:6,  name:"Anker 10-in-1 Hub",     cat:"Accessories", price:3299,   badge:"Pop",    desc:"USB-C hub with 4K HDMI & SD card",        img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"},
+    {id:7,  name:"Ringke Fusion Case",    cat:"Accessories", price:799,    badge:null,     desc:"Military-grade drop protection",        img:"https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=400&q=80"},
+    {id:8,  name:"Belkin 15W Pad",        cat:"Accessories", price:1999,   badge:"Eco",    desc:"Qi2 certified wireless charging pad",   img:"https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&q=80"},
+    {id:9,  name:"Apple AirPods Pro 2",   cat:"Audio",       price:24900,  badge:"Hot",    desc:"H2 chip, Adaptive Transparency",        img:"https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=400&q=80"},
+    {id:10, name:"Samsung Galaxy S24",    cat:"Phones",      price:74999,  badge:"New",    desc:"Snapdragon 8 Gen 3, 200MP ProVisual",   img:"https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80"},
+    {id:11, name:"iPad Air M2",           cat:"Tablets",     price:59900,  badge:null,     desc:"M2 chip, Liquid Retina, 10hrs battery", img:"https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&q=80"},
+    {id:12, name:"MacBook Air M3",        cat:"Laptops",     price:114900, badge:"New",    desc:"18-hr battery, 15.3\" Liquid Retina",   img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80"},
+    {id:13, name:"Sony Alpha A7C II",     cat:"Cameras",     price:199990, badge:null,     desc:"33MP BSI CMOS, 5-axis stabilisation",   img:"https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&q=80"},
+    {id:14, name:"LG OLED C3 65\"",       cat:"TVs",         price:189990, badge:"4K",     desc:"120Hz OLED evo panel, webOS 23",        img:"https://images.unsplash.com/photo-1593784991095-a205069470b6?w=400&q=80"},
+    {id:15, name:"PlayStation 5",         cat:"Gaming",      price:54990,  badge:"Hot",    desc:"Ultra-HD Blu-ray, haptic DualSense",    img:"https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400&q=80"},
+    {id:16, name:"Meta Quest 3",          cat:"VR/AR",       price:49990,  badge:"New",    desc:"Mixed Reality, Snapdragon XR2 Gen 2",   img:"https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=400&q=80"},
+    {id:17, name:"DJI Mini 4 Pro",        cat:"Drones",      price:74990,  badge:"4K",     desc:"4K/60fps, 3-axis gimbal, 34min flight", img:"https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&q=80"},
+    {id:18, name:"Amazon Echo Hub",       cat:"Smart Home",  price:13990,  badge:null,     desc:"Smart home control panel, 8\" display", img:"https://images.unsplash.com/photo-1518444065439-e933c06ce9cd?w=400&q=80"},
+    {id:19, name:"Garmin Forerunner 965", cat:"Wearables",   price:64990,  badge:"Health", desc:"AMOLED, multi-band GPS, HRV status",    img:"https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=400&q=80"},
+    {id:20, name:"Keychron K2 Pro",       cat:"Accessories", price:8499,   badge:null,     desc:"Hot-swap QMK/VIA wireless mechanical",  img:"https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80"}
+];
+ 
+/* ---- AUTH ---- */
+function switchTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('loginTab').classList.toggle('active', isLogin);
+    document.getElementById('signupTab').classList.toggle('active', !isLogin);
+    document.getElementById('loginForm').style.display  = isLogin ? '' : 'none';
+    document.getElementById('signupForm').style.display = isLogin ? 'none' : '';
+}
+ 
+function togglePwd(id, btn) {
+    const inp = document.getElementById(id);
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    btn.querySelector('i').className = show ? 'fas fa-eye-slash' : 'fas fa-eye';
+}
+ 
+function showErr(id, msg) {
+    const el = document.getElementById(id);
+    if (msg) el.textContent = msg;
+    el.classList.add('show');
+}
+function clearErr(id) {
+    document.getElementById(id).classList.remove('show');
+}
+ 
+function checkStrength(val) {
+    const bars = ['sb1','sb2','sb3','sb4'];
+    const txt  = document.getElementById('strengthText');
+    bars.forEach(b => { document.getElementById(b).className = 'strength-bar'; });
+    if (!val) { txt.textContent = ''; return; }
+    let score = 0;
+    if (val.length >= 8)        score++;
+    if (/[A-Z]/.test(val))      score++;
+    if (/[0-9]/.test(val))      score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const cls    = ['','weak','medium','strong','strong'];
+    const labels = ['','Weak','Fair','Good','Strong'];
+    const colors = ['','#ef4444','var(--accent3)','#22c55e','#22c55e'];
+    for (let i = 0; i < score; i++) document.getElementById(bars[i]).classList.add(cls[score]);
+    txt.textContent = labels[score];
+    txt.style.color = colors[score];
+}
+ 
+function handleLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass  = document.getElementById('loginPassword').value;
+    clearErr('loginEmailErr'); clearErr('loginPassErr');
+    let ok = true;
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { showErr('loginEmailErr'); ok = false; }
+    if (pass.length < 6) { showErr('loginPassErr'); ok = false; }
+    if (!ok) return;
+    currentUser = { name: email.split('@')[0], email };
+    enterShop();
+}
+ 
+function handleSignup() {
+    const first   = document.getElementById('signupFirst').value.trim();
+    const last    = document.getElementById('signupLast').value.trim();
+    const email   = document.getElementById('signupEmail').value.trim();
+    const phone   = document.getElementById('signupPhone').value.replace(/\D/g,'');
+    const pass    = document.getElementById('signupPassword').value;
+    const confirm = document.getElementById('signupConfirm').value;
+    const terms   = document.getElementById('agreeTerms').checked;
+    ['signupFirstErr','signupLastErr','signupEmailErr','signupPhoneErr','signupPassErr','signupConfirmErr','termsErr'].forEach(clearErr);
+    let ok = true;
+    if (!first)    { showErr('signupFirstErr');  ok = false; }
+    if (!last)     { showErr('signupLastErr');   ok = false; }
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { showErr('signupEmailErr'); ok = false; }
+    if (phone.length < 10) { showErr('signupPhoneErr'); ok = false; }
+    if (pass.length < 8)   { showErr('signupPassErr');  ok = false; }
+    if (pass !== confirm)  { showErr('signupConfirmErr','Passwords do not match.'); ok = false; }
+    if (!terms) { showErr('termsErr','Please accept the terms to continue.'); ok = false; }
+    if (!ok) return;
+    currentUser = { name: first, email };
+    document.getElementById('signupFields').style.display = 'none';
+    document.getElementById('signupSuccess').classList.add('show');
+    setTimeout(enterShop, 1800);
+}
+ 
+function socialLogin(provider) {
+    currentUser = { name: provider + ' User', email: provider.toLowerCase() + '@example.com' };
+    enterShop();
+}
+ 
+function enterShop() {
+    document.getElementById('authPage').classList.add('hidden');
+    document.getElementById('shopPage').classList.add('visible');
+    document.getElementById('userAvatar').textContent = currentUser.name.slice(0,2).toUpperCase();
+    document.getElementById('userName').textContent   = currentUser.name;
+    renderCategories();
+    displayProducts(products);
+    document.getElementById('searchInput').addEventListener('keyup', e => {
+        displayProducts(getFiltered());
+    });
+    document.querySelectorAll('#shopPage a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const t = document.querySelector(a.getAttribute('href'));
+            if (t) { e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); }
+        });
+    });
+}
+ 
+function logout() {
+    if (!confirm('Sign out of TechVault?')) return;
+    currentUser = null; cart = [];
+    document.getElementById('shopPage').classList.remove('visible');
+    document.getElementById('authPage').classList.remove('hidden');
+    document.getElementById('signupFields').style.display = '';
+    document.getElementById('signupSuccess').classList.remove('show');
+    switchTab('login');
+}
+ 
+/* ---- SHOP ---- */
+const badgeClass = {Hot:'badge-hot', New:'badge-new', Sale:'badge-sale'};
+const categories  = ['All', ...new Set(products.map(p => p.cat))];
+ 
+function renderCategories() {
+    const el = document.getElementById('categoryChips');
+    el.innerHTML = '';
+    categories.forEach(cat => {
+        const chip = document.createElement('button');
+        chip.className = 'cat-chip' + (cat === activeCategory ? ' active' : '');
+        chip.textContent = cat;
+        chip.onclick = () => { activeCategory = cat; renderCategories(); displayProducts(getFiltered()); };
+        el.appendChild(chip);
+    });
+}
+ 
+function getFiltered() {
+    const term = document.getElementById('searchInput').value.toLowerCase();
+    return products.filter(p =>
+        (activeCategory === 'All' || p.cat === activeCategory) &&
+        (term === '' || p.name.toLowerCase().includes(term) || p.cat.toLowerCase().includes(term))
+    );
+}
+ 
+function displayProducts(list) {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = '';
+    if (list.length === 0) {
+        grid.innerHTML = '<p style="color:var(--muted);text-align:center;padding:3rem;grid-column:1/-1">No products found.</p>';
+        return;
+    }
+    list.forEach(p => {
+        const bc = p.badge ? (badgeClass[p.badge] || 'badge-default') : '';
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+            ${p.badge ? `<span class="product-badge ${bc}">${p.badge}</span>` : ''}
+            <div class="product-image-container">
+                <img src="${p.img}" alt="${p.name}" class="product-image" loading="lazy">
+            </div>
+            <div class="product-info">
+                <div class="product-name">${p.name}</div>
+                <div class="product-desc">${p.desc}</div>
+                <div class="product-footer">
+                    <span class="product-price">${p.price.toLocaleString('en-IN')}</span>
+                    <button class="add-to-cart" onclick="addToCart(${p.id})"><i class="fas fa-plus"></i> Add</button>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+ 
+function searchProducts() { displayProducts(getFiltered()); }
+ 
+function addToCart(id) {
+    const p  = products.find(x => x.id === id);
+    const ex = cart.find(x => x.id === id);
+    if (ex) ex.qty++;
+    else cart.push({...p, qty:1});
+    updateCartCount();
+    showToast(`✓ ${p.name} added to cart`);
+}
+ 
+function updateCartCount() {
+    document.getElementById('cartCount').textContent = cart.reduce((s,i) => s + i.qty, 0);
+}
+ 
+function updateCartDisplay() {
+    const el = document.getElementById('cartItems');
+    if (cart.length === 0) {
+        el.innerHTML = '<div class="cart-empty"><i class="fas fa-shopping-bag"></i><p>Your cart is empty</p></div>';
+        document.getElementById('cartTotal').textContent = '₹0';
+        return;
+    }
+    let total = 0; el.innerHTML = '';
+    cart.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+            <img src="${item.img}" alt="${item.name}">
+            <div class="cart-item-info">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-price">₹${item.price.toLocaleString('en-IN')} × ${item.qty}</div>
+            </div>
+            <button class="remove-btn" onclick="removeFromCart(${item.id})"><i class="fas fa-trash-alt"></i></button>
+        `;
+        el.appendChild(div);
+        total += item.price * item.qty;
+    });
+    document.getElementById('cartTotal').textContent = '₹' + total.toLocaleString('en-IN');
+}
+ 
+function removeFromCart(id) {
+    cart = cart.filter(x => x.id !== id);
+    updateCartCount(); updateCartDisplay();
+    showToast('Item removed');
+}
+ 
+function toggleCart() {
+    document.getElementById('cartSidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('active');
+    updateCartDisplay();
+}
+ 
+function checkout() {
+    if (!cart.length) { showToast('⚠ Your cart is empty!'); return; }
+    showToast('Redirecting to checkout…');
+    setTimeout(() => {
+        cart = []; updateCartCount(); updateCartDisplay(); toggleCart();
+        setTimeout(() => showToast('🎉 Order placed! Thank you.'), 400);
+    }, 1800);
+}
+ 
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
