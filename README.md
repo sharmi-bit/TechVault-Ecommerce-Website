@@ -164,6 +164,12 @@ When users open the website, they are welcomed with a visually striking **hero s
 ## 📸 Preview
 <img width="1918" height="897" alt="Screenshot 2026-03-17 205726" src="https://github.com/user-attachments/assets/7567e721-0989-4c97-875c-4ed53f208d69" />
 <img width="1879" height="894" alt="Screenshot 2026-03-17 205739" src="https://github.com/user-attachments/assets/64eaad08-2535-458f-8c1f-cbe20ee6d366" />
+<img width="1892" height="865" alt="Screenshot 2026-03-17 205756" src="https://github.com/user-attachments/assets/8b8bb298-65fb-46e8-8562-7aefc3af9429" />
+<img width="1879" height="901" alt="Screenshot 2026-03-17 205815" src="https://github.com/user-attachments/assets/67917396-afe5-4589-8cff-899ad56c4aef" />
+<img width="1872" height="884" alt="Screenshot 2026-03-17 205831" src="https://github.com/user-attachments/assets/e197eba2-20a0-4f66-b2eb-a8dad5d84080" />
+<img width="1894" height="895" alt="Screenshot 2026-03-17 205859" src="https://github.com/user-attachments/assets/3acb0977-4576-42ec-bafa-bdbebe7b7bd0" />
+<img width="1876" height="899" alt="Screenshot 2026-03-17 205917" src="https://github.com/user-attachments/assets/e21454df-fada-4008-8e8a-d0c7647b60a1" />
+
 
 
 
